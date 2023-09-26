@@ -5,8 +5,6 @@
 This is a Pacman game with AI implementations of popular search algorithms, including Breadth-First Search (BFS), Depth-First Search (DFS), A* Search, and Uniform Cost Search. The game allows you to see how these algorithms perform in finding the optimal path for Pacman to navigate through the maze.
 This repository is a fork from the profile [aahuja9/Pacman-AI](https://github.com/aahuja9/Pacman-AI).
 
-**Note:** Modifications have been made to the original code to ensure compatibility with Python 3.
-
 ## Table of Contents
 - [Getting Started](#getting-started)
 - [How to Play](#how-to-play)
