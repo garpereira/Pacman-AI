@@ -630,12 +630,12 @@ def replayGame( layout, actions, display ):
 
     display.finish()
 
-def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0, catchExceptions=False, timeout=30 ):
+def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0, catchExceptions=False, timeout=30, games = []):
     import __main__
     __main__.__dict__['_display'] = display
 
     rules = ClassicGameRules(timeout)
-    games = []
+    #games = games
 
     for i in range( numGames ):
         beQuiet = i < numTraining
@@ -673,7 +673,7 @@ def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0
         print('Win Rate:      %d/%d (%.2f)' % (wins.count(True), len(wins), winRate))
         print('Record:       ', ', '.join([ ['Loss', 'Win'][int(w)] for w in wins]))
 
-    return games
+    return runGames(layout, pacman, ghosts, display, numGames, record, numTraining = 0, catchExceptions=False, timeout=30, games=games)
 
 if __name__ == '__main__':
     """
