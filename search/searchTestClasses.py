@@ -21,6 +21,8 @@ import textwrap
 import layout
 import pacman
 from search import SearchProblem
+import sys
+import pprint
 
 # helper function for printing solutions in solution files
 def wrap_solution(solution):
@@ -60,14 +62,14 @@ class GraphSearch(SearchProblem):
         lines = graph_text.split('\n')
         r = re.match('start_state:(.*)', lines[0])
         if r == None:
-            print "Broken graph:"
-            print '"""%s"""' % graph_text       
+            print("Broken graph:")
+            print('"""%s"""' % graph_text       )
             raise Exception("GraphSearch graph specification start_state not found or incorrect on line:" + l)
         self.start_state = r.group(1).strip()
         r = re.match('goal_states:(.*)', lines[1])
         if r == None:
-            print "Broken graph:"
-            print '"""%s"""' % graph_text       
+            print("Broken graph:")
+            print('"""%s"""' % graph_text       )
             raise Exception("GraphSearch graph specification goal_states not found or incorrect on line:" + l)
         goals = r.group(1).split()
         self.goals = map(str.strip, goals)
@@ -81,8 +83,8 @@ class GraphSearch(SearchProblem):
             elif len(l.split()) == 4:
                 start, action, next_state, cost = l.split()            
             else:
-                print "Broken graph:"
-                print '"""%s"""' % graph_text       
+                print("Broken graph:")
+                print('"""%s"""' % graph_text       )
                 raise Exception("Invalid line in GraphSearch graph specification on line:" + l)
             cost = float(cost)
             self.orderedSuccessorTuples.append((start, action, next_state, cost))
@@ -121,7 +123,7 @@ class GraphSearch(SearchProblem):
                     total_cost += cost
                     match = True
             if not match:
-                print 'invalid action sequence'
+                print('invalid action sequence')
                 sys.exit(1)
         return total_cost
 
@@ -130,7 +132,7 @@ class GraphSearch(SearchProblem):
         return self.expanded_states
     
     def __str__(self):
-        print self.successors
+        print(self.successors)
         edges = ["%s %s %s %s" % t for t in self.orderedSuccessorTuples]
         return \
 """start_state: %s
@@ -144,8 +146,8 @@ def parseHeuristic(heuristicText):
     for line in heuristicText.split('\n'):
         tokens = line.split()
         if len(tokens) != 2:
-            print "Broken heuristic:"
-            print '"""%s"""' % graph_text       
+            print("Broken heuristic:")
+            print('"""%s"""' % graph_text       )
             raise Exception("GraphSearch heuristic specification broken:" + l)
         state, h = tokens
         heuristic[state] = float(h)
@@ -155,7 +157,7 @@ def parseHeuristic(heuristicText):
             return heuristic[state]
         else:
             pp = pprint.PrettyPrinter(indent=4)        
-            print "Heuristic:"
+            print("Heuristic:")
             pp.pprint(heuristic)
             raise Exception("Graph heuristic called with invalid state: " + str(state))
 
@@ -437,12 +439,12 @@ class CornerProblemTest(testClasses.TestCase):
         handle = open(filePath, 'w')
         handle.write('# This is the solution file for %s.\n' % self.path)
 
-        print "Solving problem", self.layoutName
-        print self.layoutText
+        print("Solving problem", self.layoutName)
+        print(self.layoutText)
 
         path, _ = self.solution(search, searchAgents)
         length = len(path)
-        print "Problem solved"
+        print("Problem solved")
 
         handle.write('solution_length: "%s"\n' % length)
         handle.close()
@@ -531,12 +533,12 @@ class HeuristicTest(testClasses.TestCase):
         handle = open(filePath, 'w')
         handle.write('# This is the solution file for %s.\n' % self.path)
         
-        print "Solving problem", self.layoutName, self.heuristicName
-        print self.layoutText
+        print("Solving problem", self.layoutName, self.heuristicName)
+        print(self.layoutText)
         problem, _, heuristic = self.setupProblem(searchAgents)
         path = search.astar(problem, heuristic)
         cost = problem.getCostOfActions(path)
-        print "Problem solved"
+        print("Problem solved")
 
         handle.write('solution_cost: "%s"\n' % cost)
         handle.close()
@@ -670,11 +672,11 @@ class ClosestDotTest(testClasses.TestCase):
         handle = open(filePath, 'w')
         handle.write('# This is the solution file for %s.\n' % self.path)
         
-        print "Solving problem", self.layoutName
-        print self.layoutText
+        print("Solving problem", self.layoutName)
+        print(self.layoutText)
         
         length = len(self.solution(searchAgents))
-        print "Problem solved"
+        print("Problem solved")
 
         handle.write('solution_length: "%s"\n' % length)
         handle.close()
@@ -781,8 +783,8 @@ class CornerHeuristicPacman(testClasses.TestCase):
             grades.addMessage('FAIL: Inadmissible heuristic')
             return False
         path = search.astar(problem, searchAgents.cornersHeuristic)
-        print "path:", path
-        print "path length:", len(path)
+        print("path:", path)
+        print("path length:", len(path))
         cost = problem.getCostOfActions(path)
         if cost > true_cost:
             grades.addMessage('FAIL: Inconsistent heuristic')
@@ -861,11 +863,11 @@ class ExtraGrade(testClasses.TestCase):
                 grades.addMessage('\tPassed %s thresholds: %s points.' % (passed, passed))
                 grades.addPoints(passed)
                 return True
-            except TimeoutFunctionException:
+            except TimeoutError:
                 grades.addMessage('FAIL: %s' % self.path)              
                 grades.addMessage('\tExtra credit code is too slow')
                 return False
-        except Exception, inst:
+        except Exception as inst:
             grades.addMessage('FAIL: %s' % self.path)              
             grades.addMessage('\tExtra credit threw an exception: %s.\n%s' % (str(inst), traceback.format_exc()))
         except:
