@@ -13,6 +13,9 @@ This repository is a fork from the profile [aahuja9/Pacman-AI](https://github.co
   - [DFS](#dfs)
   - [A* Search](#a-search)
   - [Uniform Cost Search](#uniform-cost-search)
+- [Multi Agent Algorithms](#search-algorithms)
+  - [MinMax](#minmax)
+  - [Alpha-Beta](#alpha-beta)
 - [Screenshots](#screenshots)
 - [License](#license)
 
@@ -52,6 +55,12 @@ A* Search uses a heuristic to estimate the cost from the current node to the goa
 ### Uniform Cost Search
 
 Uniform Cost Search explores nodes with the least cost first. It guarantees the shortest path in terms of the cost of moves.
+
+##  Multi Agent Algorithms
+
+### MinMax
+
+### Alpha-Beta
 
 ## License
 
