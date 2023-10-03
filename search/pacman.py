@@ -631,7 +631,6 @@ def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0
     __main__.__dict__['_display'] = display
 
     rules = ClassicGameRules(timeout)
-    # games = []
 
     for i in range( numGames ):
         beQuiet = i < numTraining
@@ -655,17 +654,7 @@ def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0
             cPickle.dump(components, f)
             f.close()
 
-    if (numGames-numTraining) > 0:
-        scores = [game.state.getScore() for game in games]
-        wins = [game.state.isWin() for game in games]
-        winRate = wins.count(True)/ float(len(wins))
-        print 'Average Score:', sum(scores) / float(len(scores))
-        print 'Scores:       ', ', '.join([str(score) for score in scores])
-        print 'Win Rate:      %d/%d (%.2f)' % (wins.count(True), len(wins), winRate)
-        print 'Record:       ', ', '.join([ ['Loss', 'Win'][int(w)] for w in wins])
-
-    #return runGames(layout, pacman, ghosts, display, numGames, record, numTraining = 0, catchExceptions=False, timeout=30, games=games)
-    return games
+    return games, numGames, numTraining, game
 
 if __name__ == '__main__':
     """
@@ -678,11 +667,28 @@ if __name__ == '__main__':
 
     > python pacman.py --help
     """
+    games = 0
+    numGames = 0
+    
     args = readCommand( sys.argv[1:] ) # Get game components based on input
     while(True):
-        runGames( **args )
-        args = readCommand( sys.argv[1:] ) 
+        numTraining = 0
+        game = 0
+        retorno = runGames( **args )
+        games = retorno[0]
+        numGames += retorno[1]
+        numTraining += retorno[2]
+        game = retorno[3]
 
+        args = readCommand( sys.argv[1:] ) 
+        if (numGames-numTraining) > 0:
+            scores = [game.state.getScore() for game in games]
+            wins = [game.state.isWin() for game in games]
+            winRate = wins.count(True)/ float(len(wins))
+            print 'Average Score:', sum(scores) / float(len(scores))
+            print 'Scores:       ', ', '.join([str(score) for score in scores])
+            print 'Win Rate:      %d/%d (%.2f)' % (wins.count(True), len(wins), winRate)
+            print 'Record:       ', ', '.join([ ['Loss', 'Win'][int(w)] for w in wins])
     # import cProfile
     # cProfile.run("runGames( **args )")
     pass
